@@ -100,7 +100,7 @@ export default function ReportPage() {
     
     try {
       const genAI = new GoogleGenerativeAI(geminiApiKey!);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "models/gemini-1.5-pro" });
 
       const base64Data = await readFileAsBase64(file);
 
