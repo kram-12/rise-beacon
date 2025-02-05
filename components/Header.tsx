@@ -34,7 +34,7 @@ const privateKeyProvider = new EthereumPrivateKeyProvider({
 
 const web3auth = new Web3Auth({
     clientId,
-    web3AuthNetwork: WEB3AUTH_NETWORK.TESTNET, // Changed from SAPPHIRE_MAINNET to TESTNET
+    web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET, 
     privateKeyProvider,
 });
   
@@ -281,7 +281,7 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={getUserInfo}>
-                    {userInfo ? userInfo.name : "Fetch User Info"}
+                    {userInfo ? userInfo.name : "Profile"}
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link href="/settings">Profile</Link>
