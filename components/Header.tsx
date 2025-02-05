@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge"
 import { Web3Auth } from "@web3auth/modal"
 import { CHAIN_NAMESPACES, IProvider, WEB3AUTH_NETWORK } from "@web3auth/base"
 import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider"
-// import { useMediaQuery } from "@/hooks/useMediaQuery"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { createUser, getUnreadNotifications, markNotificationAsRead, getUserByEmail, getUserBalance } from "@/utils/db/actions"
 const clientId = "BLhkwVi6hPMojuGHxQ26BSWbfZRn0c5RI6HxgHxTj_5oHe_BNdZuSzwajRF9s5CWquu1VXqyUO3lYyhsPxfDn5I";
 const chainConfig = {
@@ -50,7 +50,7 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
     const [userInfo, setUserInfo] = useState<any>(null);
     const pathname = usePathname()
     const [notifications, setNotifications] = useState<Notification[]>([]);
-    // const isMobile = useMediaQuery("(max-width: 768px)")
+    const isMobile = useMediaQuery("(max-width: 768px)")
     const [balance, setBalance] = useState(0)
   
     // console.log('user info', userInfo);
@@ -204,10 +204,11 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
             <Button variant="ghost" size="icon" className="mr-2 md:mr-4" onClick={onMenuClick}>
               <Menu className="h-6 w-6" />
             </Button>
-            {/* <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center">
+              {/* icon  */}
               <Leaf className="h-6 w-6 md:h-8 md:w-8 text-green-500 mr-1 md:mr-2" />
               <div className="flex flex-col">
-                <span className="font-bold text-base md:text-lg text-gray-800">Zero2Hero</span>
+                <span className="font-bold text-base md:text-lg text-gray-800">Rice Beacon</span>
                 <span className="text-[8px] md:text-[10px] text-gray-500 -mt-1">ETHOnline24</span>
               </div>
             </Link>
@@ -289,7 +290,7 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
                   <DropdownMenuItem onClick={logout}>Sign Out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            )} */}
+            )} 
           </div>
         </div>
       </header>
