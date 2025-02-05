@@ -114,7 +114,7 @@ export default function ReportPage() {
       ];
 
       const prompt = `You are an expert in waste management and recycling. Analyze this image and provide:
-        1. The type of waste (e.g., plastic, paper, glass, metal, organic)
+        1. The type of waste (e.g., plastic, paper, glass, metal, organic) - note: it can contain mixed waste
         2. An estimate of the quantity or amount (in kg or liters)
         3. Your confidence level in this assessment (as a percentage)
         
