@@ -1,10 +1,11 @@
 //@ts-nocheck
 'use client'
 import { useState, useEffect } from "react"
+import Image from 'next/image';
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { Menu, Coins, Leaf, Search, Bell, User, ChevronDown, LogIn, LogOut } from "lucide-react"
+import { Menu, Coins, Search, Bell, User, ChevronDown, LogIn, LogOut } from "lucide-react"
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -206,13 +207,18 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
               <Menu className="h-6 w-6 text-gray-800" />
             </Button>
             <Link href="/" className="flex items-center">
-              {/* icon  */}
-              <Leaf className="h-6 w-6 md:h-8 md:w-8 text-green-500 mr-1 md:mr-2" />
-              <div className="flex flex-col">
-                <span className="font-bold text-base md:text-lg text-gray-800">Rice Beacon</span>
-                <span className="text-[8px] md:text-[10px] text-gray-500 -mt-1">ETHOnline24</span>
-              </div>
-            </Link>
+            <Image
+              src="/assests/logo_bg2.png"
+              alt="Logo"
+              width={40} // specify width
+              height={40} // specify height
+              priority // optional: for images that should load faster
+            />
+            <div className="flex flex-col">
+              <span className="font-bold text-base md:text-lg text-gray-800">Rice Beacon</span>
+              <span className="text-[8px] md:text-[10px] text-gray-500 -mt-1">ETHOnline24</span>
+            </div>
+          </Link>
           </div>
           {!isMobile && (
             <div className="flex-1 max-w-xl mx-4">
