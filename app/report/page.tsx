@@ -128,9 +128,10 @@ export default function ReportPage() {
       const result = await model.generateContent([prompt, ...imageParts]);
       const response = await result.response;
       const text = response.text();
-      console.log('Verification result:', text);
+      const cleanedText = text.replace(/^```json\n/, "").replace(/\n```$/, "").trim();
+      
       try {
-        const parsedResult = JSON.parse(text);
+        const parsedResult = JSON.parse(cleanedText);
         if (parsedResult.wasteType && parsedResult.quantity && parsedResult.confidence) {
           setVerificationResult(parsedResult);
           setVerificationStatus('success');
@@ -144,7 +145,7 @@ export default function ReportPage() {
           setVerificationStatus('failure');
         }
       } catch (error) {
-        console.error('Failed to parse JSON response:', text);
+        console.error('Failed to parse JSON response:', cleanedText,error);
         setVerificationStatus('failure');
       }
     } catch (error) {
