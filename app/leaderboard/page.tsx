@@ -9,7 +9,6 @@ type Reward = {
   userId: number
   points: number
   level: number
-  createdAt: Date
   userName: string | null
 }
 
@@ -19,12 +18,14 @@ export default function LeaderboardPage() {
   const [user, setUser] = useState<{ id: number; email: string; name: string } | null>(null)
 
   useEffect(() => {
-    const fetchRewardsAndUser = async () => {
+    const fetchLeaderboardData = async () => {
       setLoading(true)
       try {
-        const fetchedRewards = await getAllRewards()
-        setRewards(fetchedRewards)
-
+        // Fetch the leaderboard data (total points from transactions)
+        const fetchedLeaderboard = await getAllRewards()
+        setRewards(fetchedLeaderboard)
+  
+        // Get the current logged-in user's email from local storage
         const userEmail = localStorage.getItem('userEmail')
         if (userEmail) {
           const fetchedUser = await getUserByEmail(userEmail)
@@ -37,16 +38,16 @@ export default function LeaderboardPage() {
           toast.error('User not logged in. Please log in.')
         }
       } catch (error) {
-        console.error('Error fetching rewards and user:', error)
+        console.error('Error fetching leaderboard data:', error)
         toast.error('Failed to load leaderboard. Please try again.')
       } finally {
         setLoading(false)
       }
     }
-
-    fetchRewardsAndUser()
+  
+    fetchLeaderboardData()
   }, [])
-
+  
   return (
     <div className="">
       <div className="max-w-3xl mx-auto">

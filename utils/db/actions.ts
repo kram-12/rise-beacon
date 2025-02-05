@@ -310,24 +310,30 @@ export async function getAllRewards() {
   try {
     const rewards = await db
       .select({
-        id: Rewards.id,
-        userId: Rewards.userId,
-        points: Rewards.points,
-        level: Rewards.level,
-        createdAt: Rewards.createdAt,
+        userId: Transactions.userId,
         userName: Users.name,
+        points: sql<number>`SUM(Transactions.amount)`, // Sum of earned points
       })
-      .from(Rewards)
-      .leftJoin(Users, eq(Rewards.userId, Users.id))
-      .orderBy(desc(Rewards.points))
+      .from(Transactions)
+      .leftJoin(Users, eq(Transactions.userId, Users.id))
+      .where(sql`Transactions.type IN ('earned_report', 'earned_collect')`) // Filter only earned transactions
+      .groupBy(Transactions.userId, Users.name) // Group by user to sum their earned points
+      .orderBy(desc(sql<number>`SUM(Transactions.amount)`)) // Order by highest points
       .execute();
 
-    return rewards;
+    return rewards.map((reward, index) => ({
+      id: reward.userId, 
+      userId: reward.userId,
+      userName: reward.userName || 'Unknown User',
+      points: reward.points || 0,
+      level: Math.floor(reward.points / 10), 
+    }));
   } catch (error) {
-    console.error("Error fetching all rewards:", error);
+    console.error("Error fetching leaderboard:", error);
     return [];
   }
 }
+
 
 export async function getRewardTransactions(userId: number) {
   try {
