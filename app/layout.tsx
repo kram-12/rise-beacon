@@ -7,39 +7,39 @@ import Header from "@/components/Header"
 import Sidebar from "@/components/Sidebar"
 // import 'leaflet/dist/leaflet.css'
 import { Toaster } from 'react-hot-toast'
-// import { getAvailableRewards, getUserByEmail } from '@/utils/db/actions'
+import { getAvailableRewards, getUserByEmail } from '@/utils/db/actions'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [totalEarnings, setTotalEarnings] = useState(0)
 
-  // useEffect(() => {
-  //   const fetchTotalEarnings = async () => {
-  //     try {
-  //       const userEmail = localStorage.getItem('userEmail')
-  //       if (userEmail) {
-  //         const user = await getUserByEmail(userEmail)
-  //         console.log('user from layout', user);
+  useEffect(() => {
+    const fetchTotalEarnings = async () => {
+      try {
+        const userEmail = localStorage.getItem('userEmail')
+        if (userEmail) {
+          const user = await getUserByEmail(userEmail)
+          console.log('user from layout', user);
           
-  //         if (user) {
-  //           const availableRewards = await getAvailableRewards(user.id) as any
-  //           console.log('availableRewards from layout', availableRewards);
-  //                       setTotalEarnings(availableRewards)
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching total earnings:', error)
-  //     }
-  //   }
+          if (user) {
+            const availableRewards = await getAvailableRewards(user.id) as any
+            console.log('availableRewards from layout', availableRewards);
+                        setTotalEarnings(availableRewards)
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching total earnings:', error)
+      }
+    }
 
-  //   fetchTotalEarnings()
-  // }, [])
+    fetchTotalEarnings()
+  }, [])
 
   return (
     <html lang="en">
