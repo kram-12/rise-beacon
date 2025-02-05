@@ -45,12 +45,12 @@ export default function Home() {
 
         setImpactData({
           rewardsRedeemed: totalRewards.rewardsRedeemed || 0, 
-          volunteersEngaged: volunteers.totalVolunteers || 0,
+          volunteersEngaged: volunteers.volunteersEngaged || 0,
         });
       } catch (error) {
         console.error("Error fetching impact data:", error);
         setImpactData({
-          rewardsRedeemed: 0, // Default value on error
+          rewardsRedeemed: 0, 
           volunteersEngaged: 0,
         });
       }

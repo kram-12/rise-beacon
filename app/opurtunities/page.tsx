@@ -134,23 +134,27 @@ export default function CollectPage() {
       ]
 
       const prompt = `You are an expert in waste management and recycling. Analyze this image and provide:
-        1. Confirm if the waste type matches: ${selectedTask.wasteType}
-        2. Estimate if the quantity matches: ${selectedTask.amount}
-        3. Your confidence level in this assessment (as a percentage)
-        
-        Respond in JSON format like this:
-        {
-          "wasteTypeMatch": true/false,
-          "quantityMatch": true/false,
-          "confidence": confidence level as a number between 0 and 1
-        }`
+              1. Confirm if the waste type matches: ${selectedTask.wasteType}  
+              2. Estimate if the quantity reasonably matches: ${selectedTask.amount} (consider it a match if the estimated quantity is within ±50% of the actual amount)  
+              3. Your confidence level in this assessment (as a percentage)  
+
+              Respond in JSON format like this:  
+              {  
+                "wasteTypeMatch": true/false,  
+                "quantityMatch": true/false (true if the estimated amount is within ±50% of ${selectedTask.amount}),  
+                "confidence": confidence level as a number between 0 and 1  
+              }`
 
       const result = await model.generateContent([prompt, ...imageParts])
       const response = await result.response
       const text = response.text().replace(/^```json\n/, "").replace(/\n```$/, "").trim()
       const cleanedText = text.replace(/^```json\n|```$/g, "").trim();
-      
-      
+      console.log(cleanedText)
+      toast.error('Verification failed. The collected waste does not match the reported waste.', {
+        duration: 5000,
+        position: 'top-center',
+      })
+      setVerificationStatus('failure')
       try {
         const parsedResult = JSON.parse(cleanedText)
         setVerificationResult({

@@ -500,7 +500,7 @@ export async function getTotalRewards() {
 export async function getVolunteersEngaged() {
   try {
     const result = await db
-      .select({ volunteersEngaged: sql<number>`COUNT(DISTINCT user_id)` }) // Count unique users
+      .select({ volunteersEngaged: sql<number>`COUNT(DISTINCT user_id)` }) 
       .from(Transactions)
 
     return { volunteersEngaged: result[0]?.volunteersEngaged || 0 };
@@ -513,67 +513,3 @@ export async function getVolunteersEngaged() {
 
 //
 
-
-// Function to get available opportunities
-export async function getOpportunities() {
-  try {
-    const opportunities = await db
-      .select()
-      .from(Rewards) // Fetch rewards
-      .where(eq(Rewards.isAvailable, true)) // Only available opportunities
-      .orderBy(desc(Rewards.createdAt)) // Sort by most recent
-      .execute();
-
-    // Transform data to match frontend expectations
-    const formattedOpportunities = opportunities.map(opportunity => ({
-      id: opportunity.id,
-      title: opportunity.name, // Mapping `name` to `title`
-      location: opportunity.collectionInfo, // Assuming `collectionInfo` represents location
-      category: "Volunteering", // Placeholder, update based on your schema
-      date: opportunity.createdAt.toISOString(), // Convert Date to string
-      description: opportunity.description ?? "", // Ensure a non-null value
-    }));
-
-    return formattedOpportunities;
-  } catch (error) {
-    console.error("Error fetching opportunities:", error);
-    return [];
-  }
-}
-
-
-// Function to apply for an opportunity
-export async function applyForOpportunity(userId: number, opportunityId: number) {
-  try {
-    // Check if the opportunity exists and is still available
-    const [opportunity] = await db
-      .select()
-      .from(Rewards)
-      .where(and(eq(Rewards.id, opportunityId), eq(Rewards.isClaimed, false)))
-      .execute();
-
-    if (!opportunity) {
-      throw new Error("Opportunity not available or already claimed.");
-    }
-
-    // Update the reward as claimed
-    await db
-      .update(Rewards)
-      .set({ isClaimed: true, claimedBy: userId, claimedAt: sql`NOW()` })
-      .where(eq(Rewards.id, opportunityId))
-      .execute();
-
-    // Log the transaction
-    await db.insert(Transactions).values({
-      userId,
-      rewardId: opportunityId,
-      transactionType: 'claim',
-      createdAt: sql`NOW()`,
-    }).execute();
-
-    return { success: true, message: "Successfully applied for the opportunity." };
-  } catch (error) {
-    console.error("Error applying for opportunity:", error);
-    return { success: false, message: "Failed to apply for the opportunity." };
-  }
-}
