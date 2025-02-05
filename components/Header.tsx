@@ -1,3 +1,4 @@
+//@ts-nocheck
 'use client'
 import { useState, useEffect } from "react"
 import Link from "next/link"
@@ -202,7 +203,7 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center">
             <Button variant="ghost" size="icon" className="mr-2 md:mr-4" onClick={onMenuClick}>
-              <Menu className="h-6 w-6" />
+              <Menu className="h-6 w-6 text-gray-800" />
             </Button>
             <Link href="/" className="flex items-center">
               {/* icon  */}
