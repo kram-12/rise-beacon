@@ -7,7 +7,7 @@ import { Poppins } from 'next/font/google'
 import Image from 'next/image';
 import Link from 'next/link'
 import ContractInteraction from '@/components/ContractInteraction'
-import { getRecentReports, getAllRewards, getWasteCollectionTasks } from '@/utils/db/actions'
+import { getRecentReports, getAllRewards, getWasteCollectionTasks, getTotalRewards, getVolunteersEngaged } from '@/utils/db/actions'
 const poppins = Poppins({ 
   weight: ['300', '400', '600'],
   subsets: ['latin'],
@@ -40,38 +40,22 @@ export default function Home() {
   useEffect(() => {
     async function fetchImpactData() {
       try {
-        const reports = await getRecentReports(100);  // Fetch last 100 reports
-        const rewards = await getAllRewards();
-        const tasks = await getWasteCollectionTasks(100);  // Fetch last 100 tasks
-
-        const wasteCollected = tasks.reduce((total, task) => {
-          const match = task.amount.match(/(\d+(\.\d+)?)/);
-          const amount = match ? parseFloat(match[0]) : 0;
-          return total + amount;
-        }, 0);
-
-        const reportsSubmitted = reports.length;
-        const tokensEarned = rewards.reduce((total, reward) => total + (reward.points || 0), 0);
-        const co2Offset = wasteCollected * 0.5;  // Assuming 0.5 kg CO2 offset per kg of waste
+        const totalRewards = await getTotalRewards(); // Fetch total rewards redeemed
+        const volunteers = await getVolunteersEngaged();  // Fetch all transactions
 
         setImpactData({
-          wasteCollected: Math.round(wasteCollected * 10) / 10, // Round to 1 decimal place
-          reportsSubmitted,
-          tokensEarned,
-          co2Offset: Math.round(co2Offset * 10) / 10 // Round to 1 decimal place
+          rewardsRedeemed: totalRewards.rewardsRedeemed || 0, 
+          volunteersEngaged: volunteers.totalVolunteers || 0,
         });
       } catch (error) {
         console.error("Error fetching impact data:", error);
-        // Set default values in case of error
         setImpactData({
-          wasteCollected: 0,
-          reportsSubmitted: 0,
-          tokensEarned: 0,
-          co2Offset: 0
+          rewardsRedeemed: 0, // Default value on error
+          volunteersEngaged: 0,
         });
       }
     }
-
+  
     fetchImpactData();
   }, []);
 
@@ -95,7 +79,7 @@ export default function Home() {
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         ) : (
-          <Link href="/report">
+          <Link href="/opurtunities">
             <Button className="bg-yellow-600 hover:bg-yellow-700 text-white text-lg py-6 px-10 rounded-full font-medium transition-all duration-300 ease-in-out transform hover:scale-105">
               Start Volunteer
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -144,7 +128,7 @@ export default function Home() {
         />
 
         <ImpactCard 
-          title="Rewards Redeemed" 
+          title="Total Tokens Rewards" 
           value={`${impactData.rewardsRedeemed ?? 0} tokens`} 
           icon={Gift} 
         />

@@ -148,9 +148,11 @@ export default function CollectPage() {
       const result = await model.generateContent([prompt, ...imageParts])
       const response = await result.response
       const text = response.text().replace(/^```json\n/, "").replace(/\n```$/, "").trim()
+      const cleanedText = text.replace(/^```json\n|```$/g, "").trim();
+      
       
       try {
-        const parsedResult = JSON.parse(text)
+        const parsedResult = JSON.parse(cleanedText)
         setVerificationResult({
           wasteTypeMatch: parsedResult.wasteTypeMatch,
           quantityMatch: parsedResult.quantityMatch,
@@ -182,7 +184,7 @@ export default function CollectPage() {
       } catch (error) {
         console.log(error);
         
-        console.error('Failed to parse JSON response:', text)
+        console.error('Failed to parse JSON response:', cleanedText)
         setVerificationStatus('failure')
       }
     } catch (error) {

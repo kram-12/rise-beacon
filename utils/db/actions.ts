@@ -480,8 +480,38 @@ export async function getUserBalance(userId: number): Promise<number> {
 
 
 
-//
+// For Home page's our Impact
 
+export async function getTotalRewards() {
+  try {
+    const result = await db
+      .select({ rewardsRedeemed: sql<number>`SUM(amount)` }) // Sum only filtered amounts
+      .from(Transactions)
+      .where(sql`type IN ('earned_report', 'earned_collect')`); // Filter the types
+
+    return { rewardsRedeemed: result[0]?.rewardsRedeemed || 0 };
+  } catch (error) {
+    console.error("Error fetching total rewards:", error);
+    return { rewardsRedeemed: 0 };
+  }
+}
+
+
+export async function getVolunteersEngaged() {
+  try {
+    const result = await db
+      .select({ volunteersEngaged: sql<number>`COUNT(DISTINCT user_id)` }) // Count unique users
+      .from(Transactions)
+
+    return { volunteersEngaged: result[0]?.volunteersEngaged || 0 };
+  } catch (error) {
+    console.error("Error fetching volunteers engaged:", error);
+    return { volunteersEngaged: 0 };
+  }
+}
+
+
+//
 
 
 // Function to get available opportunities
