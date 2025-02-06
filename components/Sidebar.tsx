@@ -1,14 +1,15 @@
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { HeartHandshake, Coins, Medal, Settings, Home,Flag} from "lucide-react"
+import { HeartHandshake, Coins, Medal, Settings, Home,Flag,ChartNetwork} from "lucide-react"
 
 const sidebarItems = [
   { href: "/", icon: Home, label: "Home" },
-  { href: "/report", icon: Flag, label: "Report" },
+  { href: "/report", icon: Flag, label: "Report Waste" },
   { href: "/opurtunities", icon: HeartHandshake, label: "Opportunity" },
   { href: "/rewards", icon: Coins, label: "Rewards" },
   { href: "/leaderboard", icon: Medal, label: "Leaderboard" },
+  { href: "/activity", icon: ChartNetwork, label: "Activity Report" },
 ]
 
 interface SidebarProps {

@@ -73,7 +73,6 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
                 await createUser(user.email, user.name || 'Anonymous User');
               } catch (error) {
                 console.error("Error creating user:", error);
-                // Handle the error appropriately, maybe show a message to the user
               }
             }
           }
@@ -135,12 +134,20 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
       if (!web3auth) {
         console.log("web3auth not initialized yet");
         return;
+        
       }
       try {
         const web3authProvider = await web3auth.connect();
         setProvider(web3authProvider);
         setLoggedIn(true);
         const user = await web3auth.getUserInfo();
+        if (user.email) {
+          localStorage.setItem('userEmail', user.email);
+        }
+        if (user.id) {  
+          localStorage.setItem('userId', String(user.id));
+        }
+        
         setUserInfo(user);
         if (user.email) {
           localStorage.setItem('userEmail', user.email);
@@ -291,9 +298,9 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
                     {userInfo ? userInfo.name : "Profile"}
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href="/settings">Profile</Link>
+                    <Link href="/profile">Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuItem><Link href="/settings">Settings</Link></DropdownMenuItem>
                   <DropdownMenuItem onClick={logout}>Sign Out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

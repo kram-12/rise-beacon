@@ -59,7 +59,7 @@ export const Users = pgTable("users", {
   export const Transactions = pgTable("transactions", {
     id: serial("id").primaryKey(),
     userId: integer("user_id").references(() => Users.id).notNull(),
-    type: varchar("type", { length: 20 }).notNull(), // 'earned' or 'redeemed'
+    type: varchar("type", { length: 20 }).notNull(), 
     amount: integer("amount").notNull(),
     description: text("description").notNull(),
     date: timestamp("date").defaultNow().notNull(),

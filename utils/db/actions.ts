@@ -480,7 +480,29 @@ export async function getUserBalance(userId: number): Promise<number> {
   const balance = transactions.reduce((acc, transaction) => {
     return transaction.type.startsWith('earned') ? acc + transaction.amount : acc - transaction.amount
   }, 0);
-  return Math.max(balance, 0); // Ensure balance is never negative
+  return Math.max(balance, 0); 
+}
+
+// For profile to get coins info
+
+
+export async function getUserTotalRewards(userId: number) {
+  try {
+    const result = await db
+      .select({ rewardsRedeemed: sql<number>`SUM(amount)` }) // Sum the amount of rewards
+      .from(Transactions)
+      .where(
+        and(
+          eq(Transactions.userId, userId), 
+          sql`type IN ('earned_report', 'earned_collect')` 
+        )
+      );
+
+    return { rewardsRedeemed: result[0]?.rewardsRedeemed || 0 }; // Default to 0 if no rewards found
+  } catch (error) {
+    console.error('Error fetching user total rewards:', error);
+    return { rewardsRedeemed: 0 };
+  }
 }
 
 
@@ -517,5 +539,18 @@ export async function getVolunteersEngaged() {
 }
 
 
-//
+// creating a report
 
+export async function getAllReports() {
+  try {
+    const reports = await db
+      .select()
+      .from(Reports)
+      .orderBy(sql`${Reports.createdAt} DESC`); 
+
+    return reports;
+  } catch (error) {
+    console.error('Error fetching reports:', error);
+    throw new Error('Failed to fetch reports');
+  }
+}
