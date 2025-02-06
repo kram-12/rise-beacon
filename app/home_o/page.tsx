@@ -7,7 +7,7 @@ import { Poppins } from 'next/font/google'
 import Image from 'next/image';
 import Link from 'next/link'
 import ContractInteraction from '@/components/ContractInteraction'
-import { getRecentReports, getAllRewards, getWasteCollectionTasks, getTotalRewards, getVolunteersEngaged } from '@/utils/db/actions'
+import { getRecentReports, getAllRewards, getWasteCollectionTasks, getTotalRewards, getVolunteersEngaged, getOrgsEngaged } from '@/utils/db/actions'
 const poppins = Poppins({ 
   weight: ['300', '400', '600'],
   subsets: ['latin'],
@@ -32,26 +32,28 @@ export default function Home() {
     wasteCollected: 0,
     reportsSubmitted: 0,
     tokensEarned: 0,
-    co2Offset: 0
+    co2Offset: 0,
+    orgsEngaged: 0
   });
-
-  
 
   useEffect(() => {
     async function fetchImpactData() {
       try {
         const totalRewards = await getTotalRewards(); // Fetch total rewards redeemed
-        const volunteers = await getVolunteersEngaged();  // Fetch all transactions
-
+        const volunteers = await getVolunteersEngaged(); // Fetch all transactions
+        const organizations = await getOrgsEngaged(); // Fetch organizations engaged
+  
         setImpactData({
           rewardsRedeemed: totalRewards.rewardsRedeemed || 0, 
           volunteersEngaged: volunteers.volunteersEngaged || 0,
+          orgsEngaged: organizations.orgsEngaged || 0, // Add orgsEngaged to the state
         });
       } catch (error) {
         console.error("Error fetching impact data:", error);
         setImpactData({
           rewardsRedeemed: 0, 
           volunteersEngaged: 0,
+          orgsEngaged: 0, // Set orgsEngaged to 0 in case of an error
         });
       }
     }
@@ -117,13 +119,13 @@ export default function Home() {
 
         <ImpactCard 
           title="Hours Contributed" 
-          value={`${impactData.hoursContributed ?? 0} hrs`} 
+          value={`4 hrs`} 
           icon={Clock} 
         />
 
         <ImpactCard 
           title="Organizations Partnered" 
-          value={(impactData.organizationsPartnered ?? 0).toString()} 
+          value={(impactData.orgsEngaged ?? 0).toString()} 
           icon={Building} 
         />
 

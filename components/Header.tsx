@@ -31,15 +31,7 @@ const chainConfig = {
     logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
 };
 
-const navPro = () => {
-  const router = useRouter();
-  router.push('/profile');
-};
 
-const navSett = () => {
-  const router = useRouter();
-  router.push('/settings');
-};
 
 const privateKeyProvider = new EthereumPrivateKeyProvider({
     config: { chainConfig },
@@ -320,9 +312,10 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
                   <DropdownMenuItem onClick={getUserInfo}>
                     {userInfo ? userInfo.name : "Profile"}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={navPro}>Profile
+                  <DropdownMenuItem>
+                    <Link href="/profile">Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={navSett}>Settings</DropdownMenuItem>
+                  <DropdownMenuItem><Link href="/settings">Settings</Link></DropdownMenuItem>
                   <DropdownMenuItem onClick={logout}>Sign Out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

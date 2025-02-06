@@ -33,6 +33,7 @@ export async function createUser(email: string, name: string, userType: 'volunte
   }
 }
 
+
 export async function getUserByEmail(email: string) {
   try {
     const [user] = await db.select().from(Users).where(eq(Users.email, email)).execute();
@@ -565,8 +566,9 @@ export async function getTotalRewards() {
 export async function getVolunteersEngaged() {
   try {
     const result = await db
-      .select({ volunteersEngaged: sql<number>`COUNT(DISTINCT user_id)` }) 
-      .from(Transactions)
+          .select({ volunteersEngaged: sql<number>`COUNT(*)` })
+          .from(Users)
+          .where(sql`user_type IN ('volunteer')`);
 
     return { volunteersEngaged: result[0]?.volunteersEngaged || 0 };
   } catch (error) {
@@ -576,7 +578,20 @@ export async function getVolunteersEngaged() {
 }
 
 
-// creating a report
+export async function getOrgsEngaged(): Promise<{ orgsEngaged: number }> { // Or Promise<OrgsEngagedResult>
+  try {
+      const result = await db
+          .select({ orgsEngaged: sql<number>`COUNT(*)` })
+          .from(Users)
+          .where(sql`user_type IN ('organization')`);
+
+      return { orgsEngaged: result[0]?.orgsEngaged || 0 };
+  } catch (error) {
+      console.error("Error fetching number of orgs:", error);
+      return { orgsEngaged: 0 };
+  }
+}
+
 
 export async function getAllReports() {
   try {
