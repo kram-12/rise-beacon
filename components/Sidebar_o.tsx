@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button"
 import { HeartHandshake, Coins, Medal, Settings, Home,Flag} from "lucide-react"
 
 const sidebarItems = [
-  { href: "/", icon: Home, label: "Home" },
+  { href: "/home_o", icon: Home, label: "Home" },
   { href: "/report", icon: Flag, label: "Report" },
-  { href: "/opurtunities", icon: HeartHandshake, label: "Opportunity" },
   { href: "/rewards", icon: Coins, label: "Rewards" },
   { href: "/leaderboard", icon: Medal, label: "Leaderboard" },
 ]

@@ -2,9 +2,30 @@ import { db } from './dbConfig';
 import { Users, Reports, Rewards, CollectedWastes, Notifications, Transactions } from './schema';
 import { eq, sql, and, desc, ne } from 'drizzle-orm';
 
-export async function createUser(email: string, name: string) {
+export async function createUser(email: string, name: string, userType: 'volunteer' | 'organization') {
   try {
-    const [user] = await db.insert(Users).values({ email, name }).returning().execute();
+    const [user] = await db.insert(Users).values({ email, name, userType }).returning().execute();
+
+    if (userType === 'organization') {
+      // If the user is an organization, create a reward with 100 points
+      await db.insert(Rewards).values({
+        userId: user.id,
+        name: 'Default Reward',
+        collectionInfo: 'Default Collection Info',
+        points: 100, // 100 points for organization
+        level: 1,
+        isAvailable: true,
+      }).returning().execute();
+
+      // Optionally, add a transaction entry for tracking earnings
+      await db.insert(Transactions).values({
+        userId: user.id,
+        type: 'earned',
+        amount: 100,
+        description: 'Initial reward for organization account creation',
+      }).returning().execute();
+    }
+
     return user;
   } catch (error) {
     console.error("Error creating user:", error);
@@ -46,17 +67,32 @@ export async function createReport(
       .returning()
       .execute();
 
-    // Award 10 points for reporting waste
-    const pointsEarned = 10;
-    await updateRewardPoints(userId, pointsEarned);
+    // Redeem 10 points for reporting waste
+    const pointsToRedeem = 10;
+    const userReward = await getOrCreateReward(userId) as any;
 
-    // Create a transaction for the earned points
-    await createTransaction(userId, 'earned_report', pointsEarned, 'Points earned for reporting waste');
+    if (userReward.points < pointsToRedeem) {
+      throw new Error("Insufficient points to report an activity");
+    }
+
+    // Redeem the points
+    const [updatedReward] = await db
+      .update(Rewards)
+      .set({
+        points: sql`${Rewards.points} - ${pointsToRedeem}`,
+        updatedAt: new Date(),
+      })
+      .where(eq(Rewards.userId, userId))
+      .returning()
+      .execute();
+
+    // Create a transaction for the redeemed points
+    await createTransaction(userId, 'redeemed', pointsToRedeem, `Consumed points for reporting activity`);
 
     // Create a notification for the user
     await createNotification(
       userId,
-      `You've earned ${pointsEarned} points for reporting waste!`,
+      `You've consumed ${pointsToRedeem} points for reporting an activity!`,
       'reward'
     );
 
@@ -66,6 +102,7 @@ export async function createReport(
     return null;
   }
 }
+
 
 export async function getReportsByUserId(userId: number) {
   try {

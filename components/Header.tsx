@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Image from 'next/image';
 import Link from "next/link"
+import { useRouter } from "next/navigation";
 import { usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Menu, Coins, Search, Bell, User, ChevronDown, LogIn, LogOut } from "lucide-react"
@@ -136,26 +137,37 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
         console.log("web3auth not initialized yet");
         return;
       }
+    
       try {
         const web3authProvider = await web3auth.connect();
         setProvider(web3authProvider);
         setLoggedIn(true);
         const user = await web3auth.getUserInfo();
         setUserInfo(user);
+    
         if (user.email) {
           localStorage.setItem('userEmail', user.email);
+    
+          // Fetch userType from local storage
+          const storedUserType = localStorage.getItem('userType');
+          
           try {
-            await createUser(user.email, user.name || 'Anonymous User');
+            // Pass userType along with user email and name to the createUser function
+            await createUser(user.email, user.name || 'Anonymous User', storedUserType as 'volunteer' | 'organization');
           } catch (error) {
             console.error("Error creating user:", error);
-            // Handle the error appropriately, maybe show a message to the user
           }
         }
+    
+        window.location.reload(); // Refresh the page after login
       } catch (error) {
         console.error("Error during login:", error);
       }
     };
-  
+    
+    
+    const router = useRouter();
+
     const logout = async () => {
       if (!web3auth) {
         console.log("web3auth not initialized yet");
@@ -166,12 +178,15 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
         setProvider(null);
         setLoggedIn(false);
         setUserInfo(null);
-        localStorage.removeItem('userEmail');
+        localStorage.removeItem("userEmail");
+        localStorage.clear();  
+        router.push("/");
       } catch (error) {
         console.error("Error during logout:", error);
       }
     };
-  
+
+
     const getUserInfo = async () => {
       if (web3auth.connected) {
         const user = await web3auth.getUserInfo();
@@ -206,7 +221,6 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
             <Button variant="ghost" size="icon" className="mr-2 md:mr-4" onClick={onMenuClick}>
               <Menu className="h-6 w-6 text-gray-800" />
             </Button>
-            <Link href="/" className="flex items-center">
             <Image
               src="/assests/logo_bg2.png"
               alt="Logo"
@@ -218,7 +232,6 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
               <span className="font-bold text-base md:text-lg text-gray-800">Rise Beacon</span>
               <span className="text-[8px] md:text-[10px] text-gray-500 -mt-1">Connect, Contribute, Change</span>
             </div>
-          </Link>
           </div>
           {!isMobile && (
             <div className="flex-1 max-w-xl mx-4">
@@ -290,10 +303,6 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
                   <DropdownMenuItem onClick={getUserInfo}>
                     {userInfo ? userInfo.name : "Profile"}
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/settings">Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
                   <DropdownMenuItem onClick={logout}>Sign Out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

@@ -166,7 +166,7 @@ export default function CollectPage() {
         
         if (parsedResult.wasteTypeMatch && parsedResult.quantityMatch && parsedResult.confidence > 0.7) {
           await handleStatusChange(selectedTask.id, 'verified')
-          const earnedReward = Math.floor(Math.random() * 50) + 10 // Random reward between 10 and 59
+          const earnedReward = 10 
           
           // Save the reward
           await saveReward(user.id, earnedReward)

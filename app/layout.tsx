@@ -1,54 +1,79 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Inter } from 'next/font/google'
-import "./globals.css"
-import Header from "@/components/Header"
-import Sidebar from "@/components/Sidebar"
-// import 'leaflet/dist/leaflet.css'
-import { Toaster } from 'react-hot-toast'
-import { getAvailableRewards, getUserByEmail } from '@/utils/db/actions'
+import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { Inter } from 'next/font/google';
+import "./globals.css";
+import Header from "@/components/Header";
+import SidebarV from "@/components/Sidebar_v";  // Sidebar for Volunteer
+import SidebarO from "@/components/Sidebar_o";  // Sidebar for Organization
+import { Toaster } from 'react-hot-toast';
+import { getAvailableRewards } from '@/utils/db/actions';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [totalEarnings, setTotalEarnings] = useState(0)
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userType, setUserType] = useState<'volunteer' | 'organization' | null>(null);
+  const [totalEarnings, setTotalEarnings] = useState(0);
+  const pathname = usePathname();
+  const router = useRouter();
+  const isLoginPage = pathname === "/";
 
   useEffect(() => {
-    const fetchTotalEarnings = async () => {
+    const fetchUserData = async () => {
       try {
-        const userEmail = localStorage.getItem('userEmail')
-        if (userEmail) {
-          const user = await getUserByEmail(userEmail)
-          console.log('user from layout', user);
-          
-          if (user) {
-            const availableRewards = await getAvailableRewards(user.id) as any
-            console.log('availableRewards from layout', availableRewards);
-                        setTotalEarnings(availableRewards)
+        const storedUserType = localStorage.getItem("userType") as 'volunteer' | 'organization' | null;
+
+        if (storedUserType) {
+          setUserType(storedUserType);
+
+          // // Fetch available rewards if user is logged in
+          // if (storedUserType) {
+          //   const availableRewards = await getAvailableRewards(storedUserType);
+          //   console.log("availableRewards from layout", availableRewards);
+          //   setTotalEarnings(availableRewards);
+          // }
+
+          // Check if sidebarOpen is stored, otherwise set default state
+          const sidebarState = localStorage.getItem("sidebarOpen");
+          if (sidebarState === null) {
+            setSidebarOpen(true);
+            localStorage.setItem("sidebarOpen", "true");
+            router.refresh(); // Refresh the page after setting sidebar state
+          } else {
+            setSidebarOpen(sidebarState === "true");
           }
         }
       } catch (error) {
-        console.error('Error fetching total earnings:', error)
+        console.error("Error fetching user data:", error);
       }
-    }
+    };
 
-    fetchTotalEarnings()
-  }, [])
+    fetchUserData();
+  }, []);
 
   return (
     <html lang="en">
       <body className={inter.className}>
         <div className="min-h-screen bg-gray-50 flex flex-col">
-          <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} totalEarnings={totalEarnings} />
+          {!isLoginPage && (
+            <Header 
+              onMenuClick={() => {
+                const newState = !sidebarOpen;
+                setSidebarOpen(newState);
+                localStorage.setItem("sidebarOpen", newState.toString());
+              }} 
+              totalEarnings={totalEarnings} 
+            />
+          )}
           <div className="flex flex-1">
-            <Sidebar open={sidebarOpen} />
-            <main className="flex-1 p-4 lg:p-8 ml-0 lg:ml-64 transition-all duration-300">
+            {!isLoginPage && userType === 'volunteer' ? (
+              <SidebarV open={sidebarOpen} />
+            ) : userType === 'organization' ? (
+              <SidebarO open={sidebarOpen} />
+            ) : null}
+            <main className={`flex-1 p-4 lg:p-8 transition-all duration-300 ${isLoginPage ? 'ml-0' : sidebarOpen ? 'ml-64' : 'ml-0'}`}>
               {children}
             </main>
           </div>
@@ -56,5 +81,5 @@ export default function RootLayout({
         <Toaster />
       </body>
     </html>
-  )
+  );
 }
