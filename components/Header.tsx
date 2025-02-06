@@ -31,6 +31,16 @@ const chainConfig = {
     logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
 };
 
+const navPro = () => {
+  const router = useRouter();
+  router.push('/profile');
+};
+
+const navSett = () => {
+  const router = useRouter();
+  router.push('/settings');
+};
+
 const privateKeyProvider = new EthereumPrivateKeyProvider({
     config: { chainConfig },
   });
@@ -74,7 +84,6 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
                 await createUser(user.email, user.name || 'Anonymous User');
               } catch (error) {
                 console.error("Error creating user:", error);
-                // Handle the error appropriately, maybe show a message to the user
               }
             }
           }
@@ -136,6 +145,7 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
       if (!web3auth) {
         console.log("web3auth not initialized yet");
         return;
+        
       }
     
       try {
@@ -143,6 +153,13 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
         setProvider(web3authProvider);
         setLoggedIn(true);
         const user = await web3auth.getUserInfo();
+        if (user.email) {
+          localStorage.setItem('userEmail', user.email);
+        }
+        if (user.id) {  
+          localStorage.setItem('userId', String(user.id));
+        }
+        
         setUserInfo(user);
     
         if (user.email) {
@@ -303,6 +320,9 @@ export default function Header({ onMenuClick, totalEarnings }: HeaderProps) {
                   <DropdownMenuItem onClick={getUserInfo}>
                     {userInfo ? userInfo.name : "Profile"}
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={navPro}>Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={navSett}>Settings</DropdownMenuItem>
                   <DropdownMenuItem onClick={logout}>Sign Out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

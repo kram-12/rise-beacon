@@ -141,7 +141,9 @@ export default function CollectPage() {
               Respond in JSON format like this:  
               {  
                 "wasteTypeMatch": true/false,  
-                "quantityMatch": true/false (true if the estimated amount is within ±50% of ${selectedTask.amount}),  
+                "quantityMatch": true/false,
+                "actualQuantiy": ${selectedTask.amount},  
+                "estimatedQuantity" : estimated quanitity with units,
                 "confidence": confidence level as a number between 0 and 1  
               }`
 

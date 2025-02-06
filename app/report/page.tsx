@@ -359,7 +359,7 @@ export default function ReportPage() {
         </Button>
       </form>
 
-      <h2 className="text-3xl font-semibold mb-6 text-gray-800">Recent Reports</h2>
+      <h2 className="text-3xl font-semibold mb-6 text-gray-800">Activity Report</h2>
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
         <div className="max-h-96 overflow-y-auto">
           <table className="w-full">
