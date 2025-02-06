@@ -142,8 +142,6 @@ export default function CollectPage() {
               {  
                 "wasteTypeMatch": true/false,  
                 "quantityMatch": true/false,
-                "actualQuantiy": ${selectedTask.amount},  
-                "estimatedQuantity" : estimated quanitity with units,
                 "confidence": confidence level as a number between 0 and 1  
               }`
 
@@ -152,11 +150,7 @@ export default function CollectPage() {
       const text = response.text().replace(/^```json\n/, "").replace(/\n```$/, "").trim()
       const cleanedText = text.replace(/^```json\n|```$/g, "").trim();
       console.log(cleanedText)
-      toast.error('Verification failed. The collected waste does not match the reported waste.', {
-        duration: 5000,
-        position: 'top-center',
-      })
-      setVerificationStatus('failure')
+      
       try {
         const parsedResult = JSON.parse(cleanedText)
         setVerificationResult({
