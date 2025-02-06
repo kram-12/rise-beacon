@@ -148,10 +148,10 @@ export default function RewardsPage() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold mb-6 text-gray-800">Rewards</h1>
+      <h1 className="text-3xl font-semibold mb-6 text-gray-800">Points</h1>
       
       <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col justify-between h-full border-l-4 border-yellow-500 mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">Reward Balance</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Points Balance</h2>
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center">
             <Coins className="w-10 h-10 mr-3 text-yellow-500" />
@@ -195,7 +195,7 @@ export default function RewardsPage() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800">Available Rewards</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800">Available Points</h2>
           <div className="space-y-4">
   {rewards.filter(reward => reward.name === "Your Points").length > 0 ? (
     rewards

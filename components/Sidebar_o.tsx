@@ -6,7 +6,7 @@ import { HeartHandshake, Coins, Medal, Settings, Home,Flag, ChartNetwork} from "
 const sidebarItems = [
   { href: "/home_o", icon: Home, label: "Home" },
   { href: "/report", icon: Flag, label: "Report" },
-  { href: "/rewards_o", icon: Coins, label: "Rewards" },
+  { href: "/rewards_o", icon: Coins, label: "Points" },
   { href: "/recent", icon: ChartNetwork, label: "Activity Report" },
   { href: "/leaderboard", icon: Medal, label: "Leaderboard" },
 ]
