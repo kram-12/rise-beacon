@@ -135,7 +135,7 @@ export default function CollectPage() {
 
       const prompt = `You are an expert in waste management and recycling. Analyze this image and provide:
               1. Confirm if the waste type matches: ${selectedTask.wasteType}  
-              2. Estimate if the quantity reasonably matches: ${selectedTask.amount} (consider it a match if the estimated quantity is within ±50% of the actual amount)  
+              2. Estimate if the quantity nearly matches: ${selectedTask.amount} (consider as true even if the estimated quantity is ±50% of the actual amount)  
               3. Your confidence level in this assessment (as a percentage)  
 
               Respond in JSON format like this:  
