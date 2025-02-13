@@ -24,7 +24,7 @@ To get started with **RISE Beacon**, clone the repository and install the depend
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/kram-12/rise-beacon.git
+   git clone https://github.com/your-username/rise-beacon.git
    cd rise-beacon
    ```
 
@@ -34,6 +34,24 @@ To get started with **RISE Beacon**, clone the repository and install the depend
    # or
    yarn install
    ```
+
+### Create a `.env` File
+
+The project requires a `.env` file for environment variables. Create a file named `.env` in the root directory and add the following content:
+
+```env
+# Database URL for PostgreSQL
+DATABASE_URL="postgresql://ricebeacon_owner:npg_R6HApS0akxOD@ep-royal-hall-a1x5px91-pooler.ap-southeast-1.aws.neon.tech/ricebeacondb?sslmode=require"
+
+# Web3 Authentication Client ID for connecting with Web3
+WEB3_AUTH_CLIENT_ID="BLhkwVi6hPMojuGHxQ26BSWbfZRn0c5RI6HxgHxTj_5oHe_BNdZuSzwajRF9s5CWquu1VXqyUO3lYyhsPxfDn5I"
+
+# API key for Gemini service
+NEXT_PUBLIC_GEMINI_API_KEY="AIzaSyAczWe-pxFYFaRAwbdNxRS_pgMHt6bW-54"
+
+# Google Maps API key for location services
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="AIzaSyD01UFq8gScNKAXnhEtQ0oSnhDqSzSZeTM"
+```
 
 ### Running the Development Server
 
