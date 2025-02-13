@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RISE Beacon - Volunteer Availability Platform
+
+**RISE Beacon** is a full-stack platform designed to connect volunteers with organizations in India. The platform supports volunteer registration, organization and school interaction, and offers reward points for volunteer activities, including a unique AI-powered feature to predict waste types and weights.
+
+## Features
+
+- **Volunteer Registration:** Volunteers can sign up, view available opportunities, and earn reward points.
+- **Organization & School Integration:** Organizations can post volunteer opportunities, and schools can track student participation.
+- **AI-powered Waste Prediction:** Volunteers can upload pictures of garbage, and the system predicts the type and weight of the waste.
+- **Reward System:** Volunteers earn points that can be redeemed for sponsor coupons.
+- **Government ID Verification:** Users can verify their identity through Aadhar, PAN, and other government IDs.
+- **User Access by Schools:** Schools have access to their students' volunteer data.
 
 ## Getting Started
 
-First, run the development server:
+To get started with **RISE Beacon**, clone the repository and install the dependencies.
+
+### Prerequisites
+
+- Node.js (>= 14.0.0)
+- npm (>= 7.0.0) or yarn (>= 1.22.0)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/kram-12/rise-beacon.git
+   cd rise-beacon
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+### Running the Development Server
+
+To start the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the platform in action.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The page will auto-update as you make changes to the code.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## AI Feature
+
+**RISE Beacon** includes an AI-powered feature for waste management. Volunteers can upload images of garbage, and the AI will predict the type and weight of the waste to earn additional reward points. 
+
+## Verification
+
+- **User Verification:** Volunteers are required to verify their identity through government IDs such as Aadhar or PAN.
+- **Organization & School Verification:** Schools and organizations can be verified using a TBD method to ensure authenticity.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs) - Learn more about Next.js features and API.
+- [Vercel Deployment](https://vercel.com/docs) - Learn how to deploy your Next.js app using Vercel.
