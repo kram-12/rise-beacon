@@ -41,16 +41,16 @@ The project requires a `.env` file for environment variables. Create a file name
 
 ```env
 # Database URL for PostgreSQL
-DATABASE_URL="postgresql://ricebeacon_owner:npg_R6HApS0akxOD@ep-royal-hall-a1x5px91-pooler.ap-southeast-1.aws.neon.tech/ricebeacondb?sslmode=require"
+DATABASE_URL="your-database-url-here"
 
 # Web3 Authentication Client ID for connecting with Web3
-WEB3_AUTH_CLIENT_ID="BLhkwVi6hPMojuGHxQ26BSWbfZRn0c5RI6HxgHxTj_5oHe_BNdZuSzwajRF9s5CWquu1VXqyUO3lYyhsPxfDn5I"
+WEB3_AUTH_CLIENT_ID="your-web3-auth-client-id-here"
 
 # API key for Gemini service
-NEXT_PUBLIC_GEMINI_API_KEY="AIzaSyAczWe-pxFYFaRAwbdNxRS_pgMHt6bW-54"
+NEXT_PUBLIC_GEMINI_API_KEY="your-gemini-api-key-here"
 
 # Google Maps API key for location services
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="AIzaSyD01UFq8gScNKAXnhEtQ0oSnhDqSzSZeTM"
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="your-google-maps-api-key-here"
 ```
 
 ### Running the Development Server
